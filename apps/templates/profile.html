@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block body %}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">👤 My Profile</h2>
+
+    <div class="card bg-dark text-light border-danger shadow-lg p-4">
+        <!-- <p><strong>Username:</strong> {{ profile.user }}</p> -->
+        <p><strong>Full Name:</strong> {{ profile.fullname }}</p>
+        <p><strong>Email:</strong> {{ profile.user.email }}</p>
+        <p><strong>Phone:</strong> {{ profile.phone }}</p>
+        <p><strong>City:</strong> {{ profile.place }}</p>
+        <p><strong>Date of Birth:</strong> {{ profile.dob }}</p>
+        <p><strong>Blood Group:</strong> {{ profile.blood_group }}</p>
+        <div class="text-center mt-4">
+            <a href="{% url 'edit_profile' %}" class="btn btn-danger">Edit Profile</a>
+        </div>
+
+    </div>
+    <br>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'require' %}" class="btn btn-danger">
+            + Post Blood Requirement
+        </a>
+    </div>
+<br>
+
+<h3 class="text-danger fw-bold mb-3">🩸 Your Posted Blood Requirements</h3>
+
+    {% if user_requirements %}
+        <div class="row g-4">
+            {% for req in user_requirements %}
+            <div class="col-md-4 col-sm-6">
+                <div class="card bg-dark text-light border-danger shadow-lg h-100">
+                    <div class="card-body">
+                        <h5 class="text-danger fw-bold">{{ req.patient_name }}</h5>
+                        <p><strong>City:</strong> {{ req.city }}</p>
+                        <p><strong>Hospital:</strong> {{ req.hospital_name }}</p>
+                        <p><strong>Contact:</strong> {{ req.contact_number }}</p>
+                        <p><strong>Blood Group:</strong> 
+                            <span class="badge bg-danger">{{ req.blood_req }}</span>
+                        </p>
+                        {% if req.comments %}
+                        <p><strong>Comments:</strong> {{ req.comments }}</p>
+                        {% endif %}
+                    </div>
+                    {% if req.prescription %}
+                    <div class="card-footer bg-transparent text-center">
+                        <a href="{{ req.prescription.url }}" target="_blank" class="btn btn-outline-light btn-sm">View Prescription</a>
+                    </div>
+                    {% endif %}
+                    <a href="{% url 'delete_requirement' req.id %}" 
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Are you sure you want to delete this post?');">
+                        Delete
+                 </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        
+    {% else %}
+        <p class="text-muted">You haven’t posted any blood requirements yet.</p>
+    {% endif %}
+</div>
+
+<br>
+<br>
+{% endblock %}

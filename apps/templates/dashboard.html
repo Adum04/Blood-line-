@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+
+    <div class="p-4 mb-4 rounded-4 text-center bg-danger text-light shadow-lg">
+        <h2 class="fw-bold mb-2">Donate Blood, Save Lives ❤️</h2>
+        <p class="lead mb-3">
+            Every drop counts! Your contribution today can bring someone back to life tomorrow. 
+            Join the movement to make blood available for all in need.
+        </p>
+        <a href="{% url 'require' %}" class="btn btn-light fw-semibold">
+            + Add Blood Requirement
+        </a>
+    </div>
+    <p class="text-muted small">
+        ⏳ Posts automatically will be deleted after <strong>48 hours</strong>.
+    </p>
+    
+    
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-danger fw-bold">🩸 Active Blood Requests</h3>
+    </div>
+
+    {% if requirements %}
+        <div class="row g-4">
+            {% for req in requirements %}
+            <div class="col-md-4 col-sm-6">
+                <div class="card bg-dark text-light shadow-lg h-100 border-danger border-2">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger fw-bold">{{ req.patient_name }}</h5>
+                        <p class="card-text mb-1"><strong>Age:</strong> {{ req.age }}</p>
+                        <p class="card-text mb-1"><strong>City:</strong> {{ req.city }}</p>
+                        <p class="card-text mb-1"><strong>Hospital:</strong> {{ req.hospital_name }}</p>
+                        <p class="card-text mb-1"><strong>Contact:</strong> {{ req.contact_number }}</p>
+                        <p class="card-text mb-1"><strong>Blood Type:</strong>
+                            <span class="badge bg-danger fs-6">{{ req.blood_req }}</span>
+                        </p>
+                        {% if req.comments %}
+                        <p class="card-text mt-2"><strong>Comments:</strong> {{ req.comments }}</p>
+                        {% endif %}
+                    </div>
+
+                    {% if req.prescription %}
+                    <div class="card-footer bg-transparent border-0 text-center">
+                        <a href="{{ req.prescription.url }}" target="_blank" class="btn btn-outline-light btn-sm">
+                            View Prescription
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-4 d-flex justify-content-center">
+            <nav>
+                <ul class="pagination">
+                    {% if requirements.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ requirements.previous_page_number }}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    {% endif %}
+        
+                    {% for num in requirements.paginator.page_range %}
+                        <li class="page-item {% if requirements.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+        
+                    {% if requirements.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ requirements.next_page_number }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        
+    {% else %}
+        <p class="text-center text-muted mt-5">No blood requirements posted yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

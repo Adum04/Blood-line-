@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Blood Requirement {% endblock %}
+
+{% block body %}
+
+<div class="d-flex justify-content-center mt-5">
+    <div class="card shadow-lg border-0 p-4 bg-dark text-light" style="width: 650px; border-radius: 16px;">
+
+        <h2 class="text-center mb-4 fw-bold text-danger">Blood Requirement Form</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="mb-3">
+
+                    <label class="form-label fw-semibold">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <small class="text-muted d-block">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <small class="text-danger d-block">{{ field.errors }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-danger w-100 fw-semibold py-2 mt-2">
+                Submit Requirement
+            </button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

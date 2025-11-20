@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock %}
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">✏️ Edit Profile</h2>
+    <h4>"Please complete your profile before posting a blood requirement."</h4>
+
+    <form method="POST" class="p-4 shadow rounded bg-dark text-light">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-danger">Save Changes</button>
+            <a href="{% url 'profile_view' %}" class="btn btn-secondary ms-2">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
